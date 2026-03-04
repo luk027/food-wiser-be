@@ -7,25 +7,26 @@ export const scanProductSchema = z.object({
   userApiKey: z.string().optional(),
 });
 
-export const geminiResponseSchema = z.object({
-  name: z.string().min(1).default("Unknown Product"),
-  brand: z.string().default("Unknown Brand"),
-  overview: z.string().default("N/A"),
-  quantity: z.string().default("N/A"),
-  imageUrl: z.string().url().nullable().or(z.string().length(0)).default(null),
-  ingredients: z.string().default("N/A"),
-  allergens: z.string().default("N/A"),
-  additives: z.string().default("N/A"),
-  nutriScore: z.string().max(10).default("N/A"),
-  ecoScore: z.string().max(10).default("N/A"),
-  dietaryStatus: z.enum(["veg", "vegan", "non-veg", "unknown"]).default("unknown"),
-  halalStatus: z.enum(["halal", "haram", "doubtful", "unknown"]).default("unknown"),
-  nutritionInfo: z.object({
-    calories: z.number().default(0),
-    fat: z.number().default(0),
-    sugar: z.number().default(0),
-    protein: z.number().default(0),
-  }).default({}),
-  countryOfOrigin: z.string().default("N/A"),
-  packaging: z.string().default("N/A"),
+export const AIResponseSchema = z.object({
+  overview: z.string().min(10).default("Product information available."),
+  halalStatus: z
+    .enum(["halal", "haram", "doubtful", "unknown"])
+    .default("unknown"),
+  // .nullish() accepts null | undefined from AI; transform normalises null → undefined
+  halalReason: z
+    .string()
+    .nullish()
+    .transform((v) => v ?? undefined),
+  ingredientsTranslated: z
+    .string()
+    .nullish()
+    .transform((v) => v ?? undefined),
+  allergens: z
+    .string()
+    .nullish()
+    .transform((v) => v ?? undefined),
+  additives: z
+    .array(z.string())
+    .nullish()
+    .transform((v) => v ?? undefined),
 });

@@ -1,34 +1,34 @@
-# dependencies (bun install)
-node_modules
+# Drizzle generated migrations (if using db:generate)
+drizzle/
 
-# output
-out
-dist
-*.tgz
-
-# code coverage
-coverage
-*.lcov
-
-# logs
-logs
-_.log
-report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
-
-# dotenv environment variable files
+# Environment variables
 .env
-.env.development.local
-.env.test.local
-.env.production.local
 .env.local
+.env.*.local
 
-# caches
-.eslintcache
-.cache
+# Dependencies
+node_modules/
+
+# Bun
+.bun/
+bun.lockb
+
+# Build output
+dist/
+build/
 *.tsbuildinfo
 
-# IntelliJ based IDEs
-.idea
+# Logs
+*.log
+npm-debug.log*
 
-# Finder (MacOS) folder config
+# OS
 .DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

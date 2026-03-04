@@ -41,7 +41,9 @@ async function startServer() {
     idleTimeout: 30,
   });
 
-  logger.info(`✅ Server is live at http://localhost:${port}`);
+  logger.info(
+    `✅ Server is live at http://localhost:${port} in ${env.NODE_ENV} mode`,
+  );
 }
 
 startServer();

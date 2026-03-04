@@ -5,6 +5,6 @@ import productRoutes from "./product.routes";
 const apiRoutes = new Hono();
 
 apiRoutes.use("*", apiRateLimiter);
-apiRoutes.route("/products", productRoutes);
+apiRoutes.route("/product", productRoutes);
 
 export default apiRoutes;
