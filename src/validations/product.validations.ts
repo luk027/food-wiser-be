@@ -29,4 +29,8 @@ export const AIResponseSchema = z.object({
     .array(z.string())
     .nullish()
     .transform((v) => v ?? undefined),
+  aiInsight: z
+    .string()
+    .nullish()
+    .transform((v) => v ?? undefined),
 });

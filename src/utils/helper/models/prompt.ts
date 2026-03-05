@@ -39,6 +39,9 @@ Look up barcode **${data.barcode}** to identify this food product with certainty
 - **Categories**: ${data.categories.length > 0 ? data.categories.join(", ") : "Not available"}
 
 ## HALAL CLASSIFICATION RULES (apply strictly and in order)
+
+**CRITICAL: You MUST make a definitive determination. "unknown" is ONLY acceptable if the product has absolutely NO ingredient data, NO barcode match, and NO category information whatsoever. If you have ANY ingredient or product data, you MUST classify as halal, haram, or doubtful.**
+
 1. **haram** — Product contains ANY of the following:
    - Pork, lard, gelatin (porcine), pork-derived emulsifiers
    - Alcohol (ethanol >0.5% as intentional ingredient), wine, beer, spirits
@@ -57,25 +60,28 @@ Look up barcode **${data.barcode}** to identify this food product with certainty
    - "Natural flavours" or "flavourings" (source unknown)
    - Rennet (animal vs microbial unknown) in cheese products
    - Whey (may be from non-halal process)
+   - **When in doubt between halal and doubtful, choose "doubtful" — NOT "unknown"**
 
-3. **halal** — All ingredients are plant-based, mineral, or fish/seafood-based with no haram concerns, OR product carries a recognised halal certification label.
+3. **halal** — All ingredients are clearly plant-based, mineral, synthetic, or fish/seafood-based with no haram concerns, OR product carries a recognised halal certification label. If all listed ingredients are safe and no ambiguous additives are present, classify as "halal".
 
-4. **unknown** — Insufficient data to make a determination even after barcode lookup and ingredient analysis.
+4. **unknown** — LAST RESORT ONLY. Use this ONLY when there is literally zero ingredient data AND the barcode cannot be identified. If you can see even partial ingredients, you must make a determination (halal, haram, or doubtful).
 
 ## ACCURACY REQUIREMENTS
-- Be factually accurate and conservative. Do NOT guess.
+- Be factually accurate. Do NOT fabricate data.
 - If the barcode resolves to a specific product, describe THAT product's actual overview.
 - For ingredients in a non-English language: translate them accurately, then analyse.
 - For E-numbers: look up the actual substance they represent, identify the source (animal/plant/synthetic), and apply halal rules accordingly.
 - If a product is well-known (e.g., Nutella, Coca-Cola, Lay's), use verified public knowledge.
+- **NEVER return "unknown" for halalStatus when you have ingredient data available. Analyse what you have and commit to a classification.**
 
 ## RESPONSE FORMAT
 Respond ONLY with a valid JSON object — no markdown, no preamble, no explanation outside the JSON.
 
 {
   "overview": "<2–3 sentence factual description of the product: what it is, who makes it, main ingredients, and any notable certifications. If barcode was identified with high confidence, state the product name and brand explicitly.>",
-  "halalStatus": "<halal|haram|doubtful|unknown>",
-  "halalReason": "<1–2 sentence explanation of why this halal classification was assigned, citing specific ingredients or E-numbers.>",
+  "halalStatus": "<halal|haram|doubtful|unknown — you MUST commit to halal, haram, or doubtful if ANY ingredient data exists>",
+  "halalReason": "<1–2 sentence explanation of WHY this specific halal classification was given, citing the exact ingredients or E-numbers that led to your decision.>",
+  "aiInsight": "<One fun, surprising, or little-known fact about THIS SPECIFIC BRANDED PRODUCT — not about its generic ingredients like sugar or wheat. Talk about the BRAND or PRODUCT itself: its origin story, how it got its name, a market record it holds, a cultural significance, when it was first launched, or something unique about this product's history. 1–2 sentences max.>",
   "ingredientsTranslated": "<Full English translation of ingredients if original was non-English, otherwise omit this field or set to null>",
   "allergens": "<Comma-separated list of major allergens present (milk, eggs, wheat, gluten, soy, peanuts, tree nuts, fish, shellfish, sesame), or 'None declared' if none found>",
   "additives": ["<E-number or additive name>", "..."]
