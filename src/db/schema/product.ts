@@ -36,7 +36,9 @@ export const products = pgTable(
     // Status (derived from OFF + minimal AI)
     dietaryStatus: varchar("dietary_status", { length: 50 }),
     halalStatus: varchar("halal_status", { length: 50 }),
-    overview: text("overview"), // AI-generated or template-based summary
+    halalReason: text("halal_reason"),  // AI-generated explanation of halal classification
+    overview: text("overview"),    // AI-generated or template-based summary
+    aiInsight: text("ai_insight"), // AI-generated unique/fun fact about the product
 
     // Meta (OFF direct)
     countryOfOrigin: varchar("country_of_origin", { length: 255 }),
@@ -47,6 +49,10 @@ export const products = pgTable(
     dataCompleteness: integer("data_completeness"), // 0-100 percentage
     dataSource: varchar("data_source", { length: 50 }), // "off-only|off+ai|ai-heavy"
     lastEnriched: timestamp("last_enriched"), // When AI was last used
+
+    // Cache metadata
+    offLastModified: timestamp("off_last_modified"), // OFF's last_modified_t
+    cacheExpiresAt: timestamp("cache_expires_at"),   // TTL expiry timestamp
 
     // Timestamps
     createdAt: timestamp("created_at").defaultNow().notNull(),

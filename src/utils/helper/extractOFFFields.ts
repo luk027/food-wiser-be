@@ -28,17 +28,29 @@ export function extractOFFData(offProduct: any) {
 
     // Ingredients with language fallback
     ingredients: getMultiLangField(offProduct, "ingredients_text"),
-    ingredientsAnalysis: {
-      vegan:
-        offProduct.ingredients_analysis_tags?.includes("en:vegan") || false,
-      vegetarian:
-        offProduct.ingredients_analysis_tags?.includes("en:vegetarian") ||
-        false,
-      palmOil:
-        offProduct.ingredients_analysis_tags?.includes("en:palm-oil") || false,
-      nonVegan:
-        offProduct.ingredients_analysis_tags?.includes("en:non-vegan") || false,
-    },
+    ingredientsAnalysis: (() => {
+      const tags: string[] = offProduct.ingredients_analysis_tags || [];
+      const has = (t: string) => tags.includes(t);
+
+      // Vegan: en:vegan → true, en:non-vegan → false, en:maybe-vegan/en:vegan-status-unknown → null
+      const vegan = has("en:vegan") ? true : has("en:non-vegan") ? false : null;
+
+      // Vegetarian: en:vegetarian → true, en:non-vegetarian → false, en:maybe-vegetarian → null
+      const vegetarian = has("en:vegetarian")
+        ? true
+        : has("en:non-vegetarian")
+          ? false
+          : null;
+
+      // Palm oil: en:palm-oil → true, en:palm-oil-free → false, unknown → null
+      const palmOil = has("en:palm-oil")
+        ? true
+        : has("en:palm-oil-free")
+          ? false
+          : null;
+
+      return { vegan, vegetarian, palmOil };
+    })(),
     allergens: offProduct.allergens || null,
     additives: offProduct.additives_tags || [],
 
@@ -48,12 +60,12 @@ export function extractOFFData(offProduct: any) {
     novaGroup: offProduct.nova_group?.toString() || null,
     nutrientLevels: offProduct.nutrient_levels
       ? {
-          fat: offProduct.nutrient_levels.fat || "unknown",
-          salt: offProduct.nutrient_levels.salt || "unknown",
-          sugar: offProduct.nutrient_levels.sugars || "unknown",
-          saturatedFat:
-            offProduct.nutrient_levels["saturated-fat"] || "unknown",
-        }
+        fat: offProduct.nutrient_levels.fat || "unknown",
+        salt: offProduct.nutrient_levels.salt || "unknown",
+        sugar: offProduct.nutrient_levels.sugars || "unknown",
+        saturatedFat:
+          offProduct.nutrient_levels["saturated-fat"] || "unknown",
+      }
       : null,
     nutritionInfo: {
       calories: offProduct.nutriments?.["energy-kcal_100g"] || null,
