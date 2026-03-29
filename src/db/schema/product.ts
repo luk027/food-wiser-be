@@ -33,12 +33,10 @@ export const products = pgTable(
     nutrientLevels: jsonb("nutrient_levels"), // {fat, salt, sugar, saturatedFat}
     nutritionInfo: jsonb("nutrition_info"), // Full nutriments object with 8+ fields
 
-    // Status (derived from OFF + minimal AI)
+    // Status (derived from OFF data)
     dietaryStatus: varchar("dietary_status", { length: 50 }),
     halalStatus: varchar("halal_status", { length: 50 }),
-    halalReason: text("halal_reason"),  // AI-generated explanation of halal classification
-    overview: text("overview"),    // AI-generated or template-based summary
-    aiInsight: text("ai_insight"), // AI-generated unique/fun fact about the product
+    halalReason: text("halal_reason"),  // Explanation of halal classification
 
     // Meta (OFF direct)
     countryOfOrigin: varchar("country_of_origin", { length: 255 }),
