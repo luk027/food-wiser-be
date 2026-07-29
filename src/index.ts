@@ -38,6 +38,7 @@ async function startServer() {
   Bun.serve({
     fetch: app.fetch,
     port: port,
+    hostname: "0.0.0.0",
     idleTimeout: 30,
   });
 
